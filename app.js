@@ -83,7 +83,13 @@ function renderEditList() {
     if (active.items.length === 0) {
         itemsContainer.innerHTML = '<div class="empty-state">No names added yet.</div>';
     } else {
-        itemsContainer.innerHTML = active.items.map(item => `<div class="edit-list-item"><input type="text" class="cyber-input" value="${item.name}" onchange="updateItemName('${item.id}', this.value)"><button class="delete-btn" onclick="confirmDeleteItem('${item.id}')">🗑</button></div>`).join('');
+        itemsContainer.innerHTML = active.items.map(item => `
+            <div class="edit-list-item ${item.excluded ? 'excluded' : ''}">
+                <button class="toggle-btn ${item.excluded ? 'include' : 'exclude'}" onclick="toggleItemExclusion('${item.id}')" title="${item.excluded ? 'Include this name' : 'Exclude this name'}" aria-label="${item.excluded ? 'Include this name' : 'Exclude this name'}">${item.excluded ? '+' : '−'}</button>
+                <input type="text" class="cyber-input" value="${item.name}" onchange="updateItemName('${item.id}', this.value)">
+                <button class="delete-btn" onclick="confirmDeleteItem('${item.id}')" title="Permanently delete this name" aria-label="Permanently delete this name">🗑</button>
+            </div>
+        `).join('');
     }
 }
 
@@ -154,6 +160,13 @@ function importItems() {
     names.forEach(name => getActiveList().items.push({ id: generateUUID(), name, excluded: false }));
     state.pastedItems = ""; document.getElementById('pastedItemsInput').value = "";
     save(); renderEditList(); render();
+}
+function toggleItemExclusion(id) {
+    const item = getActiveList().items.find(i => i.id === id);
+    if (item) {
+        item.excluded = !item.excluded;
+        save(); renderEditList(); render();
+    }
 }
 function updateItemName(id, newName) {
     const item = getActiveList().items.find(i => i.id === id);
