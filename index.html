@@ -103,8 +103,10 @@
         <div class="modal-content">
             <h3>Select or Manage Lists</h3>
             <div id="listMenuItems" class="list-menu-items"></div>
-            <button id="createListBtn" class="cyber-btn secondary full-width">+ New List</button>
-            <button id="closeListMenuBtn" class="cyber-btn secondary full-width">Cancel</button>
+            <div class="modal-actions">
+                <button id="createListBtn" class="cyber-btn secondary full-width">+ New List</button>
+                <button id="closeListMenuBtn" class="cyber-btn secondary full-width">Cancel</button>
+            </div>
         </div>
     </div>
 
@@ -115,8 +117,10 @@
                 <label>List Name</label>
                 <input type="text" id="newListNameInput" class="cyber-input" placeholder="Enter list name">
             </div>
-            <button id="confirmCreateListBtn" class="cyber-btn secondary full-width">Create</button>
-            <button id="cancelCreateListBtn" class="cyber-btn secondary full-width">Cancel</button>
+            <div class="modal-actions">
+                <button id="confirmCreateListBtn" class="cyber-btn secondary full-width">Create</button>
+                <button id="cancelCreateListBtn" class="cyber-btn secondary full-width">Cancel</button>
+            </div>
         </div>
     </div>
 
@@ -132,9 +136,13 @@
             <div class="form-section">
                 <label>Import Multiple Names (one per line)</label>
                 <textarea id="pastedItemsInput" class="cyber-textarea" rows="4"></textarea>
-                <button id="importItemsBtn" class="cyber-btn secondary full-width">Import Names</button>
+                <div class="modal-actions">
+                    <button id="importItemsBtn" class="cyber-btn secondary full-width">Import Names</button>
+                </div>
             </div>
-            <button id="closeEditListBtn" class="cyber-btn secondary full-width">Done</button>
+            <div class="modal-actions">
+                <button id="closeEditListBtn" class="cyber-btn secondary full-width">Done</button>
+            </div>
         </div>
     </div>
 
@@ -142,9 +150,9 @@
         <div class="modal-content">
             <h3 id="confirmTitle">Confirm</h3>
             <p id="confirmMessage">Message</p>
-            <div class="input-row">
-                <button id="confirmYesBtn" class="cyber-btn primary">Yes</button>
-                <button id="confirmNoBtn" class="cyber-btn text-only">No</button>
+            <div class="modal-actions">
+                <button id="confirmYesBtn" class="cyber-btn secondary full-width">Yes</button>
+                <button id="confirmNoBtn" class="cyber-btn secondary full-width">No</button>
             </div>
         </div>
     </div>
@@ -153,7 +161,9 @@
         <div class="modal-content">
             <h3 id="alertTitle">Alert</h3>
             <p id="alertMessage">Message</p>
-            <button id="closeAlertBtn" class="cyber-btn secondary full-width">OK</button>
+            <div class="modal-actions">
+                <button id="closeAlertBtn" class="cyber-btn secondary full-width">OK</button>
+            </div>
         </div>
     </div>
 

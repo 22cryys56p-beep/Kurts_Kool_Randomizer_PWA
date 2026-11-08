@@ -89,6 +89,8 @@ html, body {
 .modal-content { background: var(--panel); border: 1px solid var(--cyan); border-radius: 16px; padding: 20px; width: 100%; max-width: 500px; max-height: 85vh; overflow-y: auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.5); -webkit-transform: translateZ(0); transform: translateZ(0); pointer-events: auto; -webkit-overflow-scrolling: touch; }
 .modal-content.large { max-width: 600px; }
 .modal-content h3 { color: var(--cyan); margin-bottom: 15px; font-size: 18px; letter-spacing: 1px; }
+.modal-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.modal-actions .cyber-btn.full-width { margin-top: 0; }
 .form-section { margin-bottom: 15px; }
 .form-section label { display: block; font-size: 11px; font-weight: bold; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.5px; }
 .input-row { display: flex; gap: 8px; }
