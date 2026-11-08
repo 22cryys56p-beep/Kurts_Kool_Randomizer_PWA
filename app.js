@@ -240,6 +240,9 @@ document.addEventListener('DOMContentLoaded', () => {
         input.value = '';
         closeModal('createListModal');
     });
+    document.getElementById('newListNameInput').addEventListener('input', (e) => {
+        state.newListName = e.target.value;
+    });
     document.getElementById('newListNameInput').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -262,8 +265,12 @@ document.addEventListener('DOMContentLoaded', () => {
         closeModal('editListModal');
     });
     document.getElementById('addItemBtn').addEventListener('click', addItem);
+    document.getElementById('newItemInput').addEventListener('input', (e) => { state.newItem = e.target.value; });
     document.getElementById('newItemInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') addItem(); });
     document.getElementById('importItemsBtn').addEventListener('click', importItems);
+    document.getElementById('pastedItemsInput').addEventListener('input', (e) => {
+        state.pastedItems = e.target.value;
+    });
     document.getElementById('closeAlertBtn').addEventListener('click', () => closeModal('alertModal'));
 });
 
