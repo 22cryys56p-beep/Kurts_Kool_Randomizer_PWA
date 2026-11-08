@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kool Randomizer">
+    <meta name="theme-color" content="#040915">
+    <title>Kurt's Kool Randomizer</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%23040915' rx='40'/><text x='50%' y='54%' dominant-baseline='middle' text-anchor='middle' font-size='90'>🎲</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎲</text></svg>">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="cyber-background">
+        <div class="bg-orb orb-1"></div>
+        <div class="bg-orb orb-2"></div>
+        <div class="bg-grid"></div>
+        <div class="bg-overlay">
+            <div class="overlay-top"><span class="status-dot"></span><span>KCR / INTERFACE ONLINE</span><span class="spacer"></span><span>SYS 01</span></div>
+            <div class="overlay-bottom"><span>RANDOMIZATION ENGINE</span><span class="spacer"></span><span>READY</span></div>
+        </div>
+    </div>
+
+    <main class="app-container">
+        <header class="app-header">
+            <h1 class="main-title">Kurt's Kool Randomizer</h1>
+            <button id="listMenuBtn" class="cyber-btn small">
+                <span id="activeListName">List</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+        </header>
+
+        <section class="cyber-panel cyan-accent">
+            <div class="cyber-header">
+                <div class="header-bar"></div>
+                <div class="header-text"><div class="title">RANDOM SELECTION</div><div class="subtitle">SYSTEM / PICKER MODULE</div></div>
+                <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20M2 12l5-5m-5 5l5 5"/></svg>
+            </div>
+            <div class="selection-display"><span id="selectedItem">WHO'S NEXT?</span></div>
+            <button id="drawBtn" class="cyber-btn primary">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l-5 5M4 4l5 5"/></svg>
+                PICK NEXT
+            </button>
+            <label class="cyber-toggle">
+                <input type="checkbox" id="repeatAllowed">
+                <span class="toggle-slider"></span>
+                <span class="toggle-label">ALLOW REPEAT SELECTIONS</span>
+            </label>
+            <div class="stats-panel">
+                <div><div class="stat-label">REMAINING ELIGIBLE</div><div class="stat-value" id="remainingCount">0</div></div>
+                <div class="stat-mode" id="repeatModeLabel">NO-REPEAT MODE</div>
+            </div>
+            <button id="resetBtn" class="cyber-btn text-only">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                RESET SELECTION ROUND
+            </button>
+        </section>
+
+        <section class="cyber-panel blue-accent">
+            <div class="cyber-header">
+                <div class="header-bar"></div>
+                <div class="header-text"><div class="title">CALLED THIS ROUND</div><div class="subtitle">SELECTION LOG</div></div>
+            </div>
+            <div class="history-header"><span>CHRONOLOGICAL RECORD</span><span id="historyCount">0 SELECTED</span></div>
+            <div id="historyGrid" class="history-grid"><div class="empty-state">No selections recorded.</div></div>
+        </section>
+
+        <section class="cyber-panel violet-accent">
+            <div class="cyber-header">
+                <div class="header-bar"></div>
+                <div class="header-text"><div class="title">RANDOM GROUPS</div><div class="subtitle">DISTRIBUTION MODULE</div></div>
+            </div>
+            <div class="grouping-controls">
+                <div class="segmented-control">
+                    <button class="seg-btn active" data-mode="size">Group size</button>
+                    <button class="seg-btn" data-mode="count">Number of groups</button>
+                </div>
+                <div class="stepper">
+                    <button id="decrementGroup">−</button>
+                    <span id="groupValueDisplay">ITEMS PER GROUP: 3</span>
+                    <button id="incrementGroup">+</button>
+                </div>
+                <button id="generateGroupsBtn" class="cyber-btn secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    GENERATE RANDOM GROUPS
+                </button>
+            </div>
+            <div id="groupsContainer" class="groups-container hidden">
+                <div id="groupsGrid" class="groups-grid"></div>
+                <div class="groups-nav">
+                    <button id="startOverGroupsBtn" class="cyber-btn text-only">START OVER</button>
+                    <span id="groupsProgress">1 / 1 GROUPS</span>
+                    <button id="nextGroupBtn" class="cyber-btn text-only">NEXT GROUP <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="listMenuModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Select or Manage Lists</h3>
+            <div id="listMenuItems" class="list-menu-items"></div>
+            <button id="createListBtn" class="cyber-btn primary full-width">+ New List</button>
+            <button id="closeListMenuBtn" class="cyber-btn text-only full-width">Cancel</button>
+        </div>
+    </div>
+
+    <div id="editListModal" class="modal hidden">
+        <div class="modal-content large">
+            <h3>Edit List</h3>
+            <div class="form-section"><label>List Name</label><input type="text" id="editListNameInput" class="cyber-input"></div>
+            <div class="form-section"><label>Names</label><div id="editListItems" class="edit-list-items"></div></div>
+            <div class="form-section">
+                <label>Add a Name</label>
+                <div class="input-row"><input type="text" id="newItemInput" class="cyber-input" placeholder="Enter a name"><button id="addItemBtn" class="cyber-btn primary">Add</button></div>
+            </div>
+            <div class="form-section">
+                <label>Import Multiple Names (one per line)</label>
+                <textarea id="pastedItemsInput" class="cyber-textarea" rows="4"></textarea>
+                <button id="importItemsBtn" class="cyber-btn primary full-width">Import Names</button>
+            </div>
+            <button id="closeEditListBtn" class="cyber-btn text-only full-width">Done</button>
+        </div>
+    </div>
+
+    <div id="alertModal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="alertTitle">Alert</h3>
+            <p id="alertMessage">Message</p>
+            <button id="closeAlertBtn" class="cyber-btn primary full-width">OK</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
