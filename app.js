@@ -159,7 +159,7 @@ function updateItemName(id, newName) {
     if (item) { item.name = newName; save(); render(); }
 }
 function confirmDeleteItem(id) {
-    if (confirm("Delete this name?")) {
+    if (window.confirm("Delete this name?")) {
         getActiveList().items = getActiveList().items.filter(i => i.id !== id);
         getActiveList().calledIDs = getActiveList().calledIDs.filter(cid => cid !== id);
         save(); renderEditList(); render();
@@ -167,17 +167,27 @@ function confirmDeleteItem(id) {
 }
 function confirmDeleteList(idx) {
     state.pendingListDeletion = state.lists[idx].id;
-    if (confirm(`Delete the entire list "${state.lists[idx].name}" and its history?`)) deletePendingList();
+    if (window.confirm(`Delete the entire list "${state.lists[idx].name}" and its history?`)) deletePendingList();
 }
 function openEditList(idx) {
-    state.selectedListIndex = idx; closeModal('listMenuModal'); renderEditList(); openModal('editListModal');
+    state.selectedListIndex = idx; closeModal('listMenuModal'); renderEditList(); openModal('editListModal', '#editListNameInput');
 }
-function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+function openModal(id, focusSelector = null) {
+    const modal = document.getElementById(id);
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    if (focusSelector) {
+        setTimeout(() => {
+            const target = modal.querySelector(focusSelector) || document.getElementById(focusSelector.replace('#', ''));
+            if (target && typeof target.focus === 'function') target.focus();
+        }, 50);
+    }
+}
 function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 function showAlert(title, message) {
     document.getElementById('alertTitle').textContent = title;
     document.getElementById('alertMessage').textContent = message;
-    openModal('alertModal');
+    openModal('alertModal', '#closeAlertBtn');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -199,8 +209,31 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('listMenuBtn').addEventListener('click', () => { renderListMenu(); openModal('listMenuModal'); });
     document.getElementById('closeListMenuBtn').addEventListener('click', () => closeModal('listMenuModal'));
     document.getElementById('createListBtn').addEventListener('click', () => {
-        const name = prompt("Enter new list name:");
-        if (name && name.trim()) { state.newListName = name.trim(); createList(); }
+        document.getElementById('newListNameInput').value = '';
+        openModal('createListModal', '#newListNameInput');
+    });
+    document.getElementById('confirmCreateListBtn').addEventListener('click', () => {
+        const input = document.getElementById('newListNameInput');
+        const name = input.value.trim();
+        if (!name) {
+            input.focus();
+            return;
+        }
+        state.newListName = name;
+        closeModal('createListModal');
+        input.value = '';
+        createList();
+    });
+    document.getElementById('cancelCreateListBtn').addEventListener('click', () => {
+        const input = document.getElementById('newListNameInput');
+        input.value = '';
+        closeModal('createListModal');
+    });
+    document.getElementById('newListNameInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            document.getElementById('confirmCreateListBtn').click();
+        }
     });
     document.getElementById('closeEditListBtn').addEventListener('click', () => {
         const newName = document.getElementById('editListNameInput').value.trim();
