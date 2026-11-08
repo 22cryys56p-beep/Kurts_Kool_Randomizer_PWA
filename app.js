@@ -17,7 +17,8 @@ let state = {
     lists: [], selectedListIndex: 0, repeatAllowed: false, selectedItem: "",
     newItem: "", pastedItems: "", newListName: "", groupingMode: "size",
     groupValue: 3, groups: [], currentGroup: 0,
-    pendingListDeletion: null, pendingItemDeletion: null
+    pendingListDeletion: null, pendingItemDeletion: null,
+    pendingConfirmAction: null
 };
 
 function loadLists() {
@@ -159,20 +160,26 @@ function updateItemName(id, newName) {
     if (item) { item.name = newName; save(); render(); }
 }
 function confirmDeleteItem(id) {
-    if (window.confirm("Delete this name?")) {
+    showConfirm('Delete this name?', 'Are you sure you want to delete this name?', () => {
         getActiveList().items = getActiveList().items.filter(i => i.id !== id);
         getActiveList().calledIDs = getActiveList().calledIDs.filter(cid => cid !== id);
         save(); renderEditList(); render();
-    }
+    });
 }
 function confirmDeleteList(idx) {
     state.pendingListDeletion = state.lists[idx].id;
-    if (window.confirm(`Delete the entire list "${state.lists[idx].name}" and its history?`)) deletePendingList();
+    showConfirm('Delete this list?', `Delete the entire list "${state.lists[idx].name}" and its history?`, () => deletePendingList());
+}
+function showConfirm(title, message, onConfirm) {
+    state.pendingConfirmAction = onConfirm;
+    document.getElementById('confirmTitle').textContent = title;
+    document.getElementById('confirmMessage').textContent = message;
+    openModal('confirmModal', '#confirmNoBtn', 100);
 }
 function openEditList(idx) {
-    state.selectedListIndex = idx; closeModal('listMenuModal'); renderEditList(); openModal('editListModal', '#editListNameInput');
+    state.selectedListIndex = idx; closeModal('listMenuModal'); renderEditList(); openModal('editListModal', '#editListNameInput', 100);
 }
-function openModal(id, focusSelector = null) {
+function openModal(id, focusSelector = null, delay = 100) {
     const modal = document.getElementById(id);
     if (!modal) return;
     modal.classList.remove('hidden');
@@ -180,14 +187,17 @@ function openModal(id, focusSelector = null) {
         setTimeout(() => {
             const target = modal.querySelector(focusSelector) || document.getElementById(focusSelector.replace('#', ''));
             if (target && typeof target.focus === 'function') target.focus();
-        }, 50);
+        }, delay);
     }
 }
-function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+function closeModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) modal.classList.add('hidden');
+}
 function showAlert(title, message) {
     document.getElementById('alertTitle').textContent = title;
     document.getElementById('alertMessage').textContent = message;
-    openModal('alertModal', '#closeAlertBtn');
+    openModal('alertModal', '#closeAlertBtn', 100);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -209,8 +219,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('listMenuBtn').addEventListener('click', () => { renderListMenu(); openModal('listMenuModal'); });
     document.getElementById('closeListMenuBtn').addEventListener('click', () => closeModal('listMenuModal'));
     document.getElementById('createListBtn').addEventListener('click', () => {
-        document.getElementById('newListNameInput').value = '';
-        openModal('createListModal', '#newListNameInput');
+        const input = document.getElementById('newListNameInput');
+        input.value = '';
+        openModal('createListModal', '#newListNameInput', 100);
     });
     document.getElementById('confirmCreateListBtn').addEventListener('click', () => {
         const input = document.getElementById('newListNameInput');
@@ -234,6 +245,16 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             document.getElementById('confirmCreateListBtn').click();
         }
+    });
+    document.getElementById('confirmYesBtn').addEventListener('click', () => {
+        const callback = state.pendingConfirmAction;
+        closeModal('confirmModal');
+        state.pendingConfirmAction = null;
+        if (typeof callback === 'function') callback();
+    });
+    document.getElementById('confirmNoBtn').addEventListener('click', () => {
+        closeModal('confirmModal');
+        state.pendingConfirmAction = null;
     });
     document.getElementById('closeEditListBtn').addEventListener('click', () => {
         const newName = document.getElementById('editListNameInput').value.trim();
