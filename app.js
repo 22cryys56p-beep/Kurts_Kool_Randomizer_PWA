@@ -174,21 +174,21 @@ function showConfirm(title, message, onConfirm) {
     state.pendingConfirmAction = onConfirm;
     document.getElementById('confirmTitle').textContent = title;
     document.getElementById('confirmMessage').textContent = message;
-    openModal('confirmModal', '#confirmNoBtn', 100);
+    openModal('confirmModal', '#confirmNoBtn', 150);
 }
 function openEditList(idx) {
-    state.selectedListIndex = idx; closeModal('listMenuModal'); renderEditList(); openModal('editListModal', '#editListNameInput', 100);
+    state.selectedListIndex = idx; closeModal('listMenuModal'); renderEditList(); openModal('editListModal', '#editListNameInput', 150);
 }
-function openModal(id, focusSelector = null, delay = 100) {
+function openModal(id, focusSelector = null, delay = 150) {
     const modal = document.getElementById(id);
     if (!modal) return;
     modal.classList.remove('hidden');
-    if (focusSelector) {
-        setTimeout(() => {
-            const target = modal.querySelector(focusSelector) || document.getElementById(focusSelector.replace('#', ''));
-            if (target && typeof target.focus === 'function') target.focus();
-        }, delay);
-    }
+    setTimeout(() => {
+        const target = focusSelector
+            ? (modal.querySelector(focusSelector) || document.getElementById(focusSelector.replace('#', '')))
+            : (modal.querySelector('input, textarea, select') || modal.querySelector('button'));
+        if (target && typeof target.focus === 'function') target.focus();
+    }, delay);
 }
 function closeModal(id) {
     const modal = document.getElementById(id);
@@ -197,7 +197,7 @@ function closeModal(id) {
 function showAlert(title, message) {
     document.getElementById('alertTitle').textContent = title;
     document.getElementById('alertMessage').textContent = message;
-    openModal('alertModal', '#closeAlertBtn', 100);
+    openModal('alertModal', '#closeAlertBtn', 150);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('createListBtn').addEventListener('click', () => {
         const input = document.getElementById('newListNameInput');
         input.value = '';
-        openModal('createListModal', '#newListNameInput', 100);
+        openModal('createListModal', '#newListNameInput', 150);
     });
     document.getElementById('confirmCreateListBtn').addEventListener('click', () => {
         const input = document.getElementById('newListNameInput');
