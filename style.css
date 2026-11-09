@@ -95,11 +95,11 @@ html, body {
 .form-section label { display: block; font-size: 11px; font-weight: bold; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.5px; }
 .input-row { display: flex; gap: 8px; }
 .edit-list-item { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-.edit-list-item.excluded { opacity: 0.6; }
+.edit-list-item.excluded input { color: rgba(224, 242, 255, 0.45); text-shadow: none; }
 .edit-list-item input { flex: 1; }
 .edit-list-item .toggle-btn, .edit-list-item .delete-btn { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; cursor: pointer; padding: 0; line-height: 1; font-weight: 700; font-size: 22px; }
-.edit-list-item .toggle-btn.exclude { border: 1px solid rgba(255, 77, 77, 0.6); background: rgba(255, 77, 77, 0.09); color: #ff7a7a; }
-.edit-list-item .toggle-btn.include { border: 1px solid rgba(51, 232, 255, 0.6); background: rgba(51, 232, 255, 0.09); color: var(--cyan); }
+.edit-list-item .toggle-btn.exclude { border: 1px solid rgba(31, 100, 250, 0.7); background: rgba(31, 100, 250, 0.12); color: #6c99ff; }
+.edit-list-item .toggle-btn.include { border: 1px solid rgba(168, 255, 107, 0.6); background: rgba(168, 255, 107, 0.09); color: var(--lime); }
 .edit-list-item .delete-btn { border: 1px solid rgba(255, 77, 77, 0.6); background: rgba(255, 77, 77, 0.09); color: #ff7a7a; font-size: 18px; }
 .edit-list-item .toggle-btn:active, .edit-list-item .delete-btn:active { opacity: 0.8; }
 .list-menu-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 8px; cursor: pointer; }
